@@ -13,6 +13,7 @@
             <provet-visually-hidden>Account Information</provet-visually-hidden>
             <provet-fieldset>
               <provet-input
+                expand
                 label="Email"
                 type="email"
                 v-model="formData.email"
@@ -25,6 +26,7 @@
 
             <provet-fieldset>
               <provet-input
+                expand
                 label="Password"
                 :type="showPassword ? 'text' : 'password'"
                 v-model="formData.password"
@@ -51,6 +53,7 @@
 
             <provet-fieldset>
               <provet-input
+                expand
                 label="Confirm Password"
                 :type="showConfirmPassword ? 'text' : 'password'"
                 v-model="formData.confirmPassword"
@@ -220,6 +223,38 @@ const handleSubmit = async (): Promise<void> => {
   .responsive-heading {
     font-size: var(--n-font-size-l);
     text-align: center;
+    margin-bottom: var(--n-space-s);
+  }
+
+  .button-container {
+    margin-top: var(--n-space-s);
+  }
+
+  provet-fieldset {
+    margin-bottom: var(--n-space-s);
+  }
+
+  provet-input,
+  provet-checkbox {
+    width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .registration-form {
+    padding: var(--n-space-xxs);
+  }
+
+  provet-card {
+    padding: var(--n-space-s);
+  }
+
+  .n-space-y-l {
+    gap: var(--n-space-m);
+  }
+
+  .n-space-y-m {
+    gap: var(--n-space-s);
   }
 }
 </style>
