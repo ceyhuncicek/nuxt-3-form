@@ -25,23 +25,57 @@
             <provet-fieldset>
               <provet-input
                 label="Password"
-                type="password"
+                :type="showPassword ? 'text' : 'password'"
                 v-model="formData.password"
                 :error="errors.password"
-                @input="errors.password = ''"
+                @input="errors.password = undefined"
                 required
-              ></provet-input>
+              >
+                <provet-button
+                  href="#"
+                  slot="end"
+                  square
+                  @click="showPassword = !showPassword"
+                  :aria-label="showPassword ? 'Hide password' : 'Show password'"
+                >
+                  <provet-icon
+                    :name="
+                      showPassword ? 'interface-edit-on' : 'interface-edit-off'
+                    "
+                  />
+                </provet-button>
+              </provet-input>
             </provet-fieldset>
 
             <provet-fieldset>
               <provet-input
                 label="Confirm Password"
-                type="password"
+                :type="showConfirmPassword ? 'text' : 'password'"
                 v-model="formData.confirmPassword"
                 :error="errors.confirmPassword"
-                @input="errors.confirmPassword = ''"
+                @input="errors.confirmPassword = undefined"
                 required
-              ></provet-input>
+              >
+                <provet-button
+                  href="#"
+                  slot="end"
+                  square
+                  @click="showConfirmPassword = !showConfirmPassword"
+                  :aria-label="
+                    showConfirmPassword
+                      ? 'Hide confirm password'
+                      : 'Show confirm password'
+                  "
+                >
+                  <provet-icon
+                    :name="
+                      showConfirmPassword
+                        ? 'interface-edit-on'
+                        : 'interface-edit-off'
+                    "
+                  />
+                </provet-button>
+              </provet-input>
             </provet-fieldset>
           </provet-fieldset>
 
@@ -79,6 +113,10 @@ import "@provetcloud/web-components/lib/Fieldset";
 import "@provetcloud/web-components/lib/Card";
 import "@provetcloud/web-components/lib/Select";
 import "@provetcloud/web-components/lib/VisuallyHidden";
+import "@provetcloud/web-components/lib/Icon";
+
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
 
 const formData = ref({
   email: "",
@@ -88,10 +126,10 @@ const formData = ref({
 });
 
 const errors = ref({
-  email: "",
-  password: "",
-  confirmPassword: "",
-  agreeTerms: "",
+  email: undefined,
+  password: undefined,
+  confirmPassword: undefined,
+  agreeTerms: undefined,
 });
 
 const schema = yup.object({
@@ -123,7 +161,7 @@ const validateForm = async () => {
   try {
     // Reset errors
     Object.keys(errors.value).forEach((key) => {
-      errors.value[key] = "";
+      errors.value[key] = undefined;
     });
 
     // Validate form data
