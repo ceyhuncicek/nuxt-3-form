@@ -92,8 +92,15 @@
                 label="I agree to the Terms and Conditions"
                 v-model="formData.agreeTerms"
                 :error="errors.agreeTerms"
+                @input="errors.agreeTerms = undefined"
                 type="checkbox"
                 required
+              ></provet-checkbox>
+              <provet-checkbox
+                label="I would like to receive occasional product updates and announcements"
+                v-model="formData.receiveUpdates"
+                :error="errors.receiveUpdates"
+                type="checkbox"
               ></provet-checkbox>
             </provet-fieldset>
           </provet-fieldset>
@@ -140,6 +147,7 @@ const formSchema = object({
   agreeTerms: boolean()
     .required()
     .oneOf([true], "You must agree to the terms and conditions"),
+  receiveUpdates: boolean().default(false),
 });
 
 type FormData = InferType<typeof formSchema>;
@@ -156,6 +164,7 @@ const formData = ref<FormData>({
   password: "",
   confirmPassword: "",
   agreeTerms: false,
+  receiveUpdates: false,
 });
 
 const errors = ref<FormErrors>({
@@ -163,6 +172,7 @@ const errors = ref<FormErrors>({
   password: undefined,
   confirmPassword: undefined,
   agreeTerms: undefined,
+  receiveUpdates: undefined,
 });
 
 const validateForm = async (): Promise<boolean> => {
