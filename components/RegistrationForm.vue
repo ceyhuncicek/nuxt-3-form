@@ -16,6 +16,8 @@
                 label="Email"
                 type="email"
                 v-model="formData.email"
+                :error="errors.email"
+                @input="errors.email = ''"
                 required
               ></provet-input>
             </provet-fieldset>
@@ -25,6 +27,8 @@
                 label="Password"
                 type="password"
                 v-model="formData.password"
+                :error="errors.password"
+                @input="errors.password = ''"
                 required
               ></provet-input>
             </provet-fieldset>
@@ -34,6 +38,8 @@
                 label="Confirm Password"
                 type="password"
                 v-model="formData.confirmPassword"
+                :error="errors.confirmPassword"
+                @input="errors.confirmPassword = ''"
                 required
               ></provet-input>
             </provet-fieldset>
@@ -45,6 +51,7 @@
               <provet-checkbox
                 label="I agree to the Terms and Conditions"
                 v-model="formData.agreeTerms"
+                :error="errors.agreeTerms"
                 type="checkbox"
                 required
               ></provet-checkbox>
@@ -64,6 +71,7 @@
 
 <script setup>
 import { ref } from "vue";
+import * as yup from "yup";
 import "@provetcloud/web-components/lib/Input";
 import "@provetcloud/web-components/lib/Button";
 import "@provetcloud/web-components/lib/Checkbox";
@@ -79,9 +87,67 @@ const formData = ref({
   agreeTerms: false,
 });
 
-const handleSubmit = () => {
-  console.log("Form submitted:", formData.value);
-  // Here you would typically send the data to your API
+const errors = ref({
+  email: "",
+  password: "",
+  confirmPassword: "",
+  agreeTerms: "",
+});
+
+const schema = yup.object({
+  email: yup
+    .string()
+    .required("Email is required")
+    .email("Invalid email format"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(8, "Password must be at least 8 characters")
+    .matches(/[0-9]/, "Password must contain at least one number")
+    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+    .matches(
+      /[^A-Za-z0-9]/,
+      "Password must contain at least one special character"
+    ),
+  confirmPassword: yup
+    .string()
+    .required("Please confirm your password")
+    .oneOf([yup.ref("password")], "Passwords must match"),
+  agreeTerms: yup
+    .boolean()
+    .oneOf([true], "You must agree to the terms and conditions"),
+});
+
+const validateForm = async () => {
+  try {
+    // Reset errors
+    Object.keys(errors.value).forEach((key) => {
+      errors.value[key] = "";
+    });
+
+    // Validate form data
+    await schema.validate(formData.value, { abortEarly: false });
+    return true;
+  } catch (validationError) {
+    if (validationError instanceof yup.ValidationError) {
+      // Set validation errors
+      validationError.inner.forEach((error) => {
+        if (error.path) {
+          errors.value[error.path] = error.message;
+        }
+      });
+    }
+    return false;
+  }
+};
+
+const handleSubmit = async () => {
+  const isValid = await validateForm();
+  if (isValid) {
+    console.log("Form submitted:", formData.value);
+    // Here you would typically send the data to your API
+  }
 };
 </script>
 
