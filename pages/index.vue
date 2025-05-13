@@ -13,8 +13,4 @@
 
 <script setup>
 import "@provetcloud/web-components/lib/Button";
-
-definePageMeta({
-  layout: "default",
-});
 </script>
