@@ -8,9 +8,8 @@ export default defineNuxtConfig({
 
   // ProvetCloud Design System
   css: [
-    "@provetcloud/css/lib/provet.css",
-    "@provetcloud/themes/lib/provet.css",
     "@nordhealth/fonts/lib/fonts.css",
+    "@provetcloud/css/lib/provet.min.css",
   ],
 
   modules: [

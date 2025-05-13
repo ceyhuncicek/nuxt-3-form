@@ -1,5 +1,5 @@
 <template>
-  <div class="n-reset">
+  <div>
     <header class="container text-center">
       <h1 class="n-typescale-headline-large">Nuxt 3 Form Application</h1>
       <p class="n-typescale-body">

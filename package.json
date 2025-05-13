@@ -20,7 +20,7 @@
     "@provetcloud/css": "^1.1.0",
     "@provetcloud/themes": "^1.0.0",
     "@provetcloud/tokens": "^1.0.0",
-    "@provetcloud/web-components": "^1.4.0",
+    "@provetcloud/web-components": "^1.0.0",
     "@provetcloud/web-components-vue-types": "^1.4.0",
     "@vee-validate/nuxt": "^4.15.0",
     "eslint": "^9.0.0",
