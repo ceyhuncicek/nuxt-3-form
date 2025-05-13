@@ -1,75 +1,66 @@
-# Nuxt Minimal Starter
+# Nuxt 3 Form Project
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A simple form application built with Nuxt 3. The project focuses on minimalism, accessibility, and responsive design using ProvetCloud components.
 
-## Setup
+## Key Features
 
-Make sure to install dependencies:
+- Built with ProvetCloud components
+- Fully accessible with ARIA support and keyboard navigation
+- Mobile-first responsive design
+- Minimal and efficient codebase
+- Two main pages:
+  - `/`: Main form page
+  - `/success`: Success confirmation page
+
+## Quick Start
 
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
+# Install dependencies
 yarn install
 
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
+# Start development server
 yarn dev
 
-# bun
-bun run dev
+# Run tests
+yarn test
 ```
 
-## Production
+The application will be available at `http://localhost:3000`
 
-Build the application for production:
+## Tech Stack
 
-```bash
-# npm
-npm run build
+- Nuxt 3
+- Vue 3
+- TypeScript
+- ProvetCloud Components
+- Vitest for Testing
 
-# pnpm
-pnpm build
+## Project Structure
 
-# yarn
-yarn build
-
-# bun
-bun run build
+```
+├── components/    # Reusable Vue components
+├── pages/         # Application pages/routes
+│   ├── index.vue  # Main form page
+│   └── success.vue# Success page
+├── layouts/       # Page layouts
+├── composables/   # Composable functions
+├── utils/         # Utility functions
+├── test/          # Test files
+└── assets/        # Static assets
 ```
 
-Locally preview production build:
+## Scripts
 
-```bash
-# npm
-npm run preview
+- `yarn dev` - Start development server
+- `yarn build` - Build for production
+- `yarn preview` - Preview production build
+- `yarn test` - Run tests
 
-# pnpm
-pnpm preview
+## Accessibility
 
-# yarn
-yarn preview
+The application follows WCAG guidelines with:
 
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+- Proper ARIA labels
+- Keyboard navigation support
+- Focus management
+- Screen reader friendly structure
