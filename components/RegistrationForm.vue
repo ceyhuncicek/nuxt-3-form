@@ -18,6 +18,7 @@
                 v-model="formData.email"
                 :error="errors.email"
                 @input="errors.email = ''"
+                hint="Enter a valid email address (e.g., example@domain.com)"
                 required
               ></provet-input>
             </provet-fieldset>
@@ -29,6 +30,7 @@
                 v-model="formData.password"
                 :error="errors.password"
                 @input="errors.password = undefined"
+                hint="Password must be at least 8 characters and contain: 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character"
                 required
               >
                 <provet-button
@@ -54,6 +56,7 @@
                 v-model="formData.confirmPassword"
                 :error="errors.confirmPassword"
                 @input="errors.confirmPassword = undefined"
+                hint="Please enter your password again to confirm"
                 required
               >
                 <provet-button
