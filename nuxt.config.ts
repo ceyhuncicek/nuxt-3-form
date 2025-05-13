@@ -26,8 +26,12 @@ export default defineNuxtConfig({
     optimizeDeps: {
       include: ["@provetcloud/web-components/lib/index.js"],
     },
+    vue: {
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => tag.startsWith("provet-"),
+        },
+      },
+    },
   },
-
-  // Add ProvetCloud web components to client plugins
-  plugins: [{ src: "~/plugins/provetcloud.client.js", mode: "client" }],
 });

@@ -7,14 +7,13 @@
       </p>
     </div>
 
-    <RegistrationForm />
+    <provet-button>Click me</provet-button>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import "@provetcloud/web-components/lib/Button";
 
-<script>
-// Define the layout for this page
 definePageMeta({
   layout: "default",
 });
