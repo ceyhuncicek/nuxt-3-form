@@ -128,6 +128,7 @@ import "@provetcloud/web-components/lib/Card";
 import "@provetcloud/web-components/lib/Select";
 import "@provetcloud/web-components/lib/VisuallyHidden";
 import "@provetcloud/web-components/lib/Icon";
+import { useRouter } from "vue-router";
 
 const formSchema = object({
   email: string().required("Email is required").email("Invalid email format"),
@@ -175,6 +176,8 @@ const errors = ref<FormErrors>({
   receiveUpdates: undefined,
 });
 
+const router = useRouter();
+
 const validateForm = async (): Promise<boolean> => {
   try {
     // Reset errors
@@ -207,6 +210,8 @@ const handleSubmit = async (): Promise<void> => {
   if (isValid) {
     console.log("Form submitted:", formData.value);
     // Here you would typically send the data to your API
+    // After successful submission, navigate to success page
+    router.push("/success");
   }
 };
 </script>
