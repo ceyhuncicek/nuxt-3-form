@@ -1,15 +1,21 @@
 <template>
-  <div class="container">
-    <div class="n-space-y-xl">
-      <div class="n-space-y-s text-center">
-        <h1 class="n-typescale-headline-large">Nuxt 3 Form Application</h1>
-        <p class="n-typescale-body">
-          Welcome to the Nuxt 3 Form Application using ProvetCloud Design System
-        </p>
-      </div>
+  <div class="n-reset">
+    <header class="container text-center">
+      <h1 class="n-typescale-headline-large">Nuxt 3 Form Application</h1>
+      <p class="n-typescale-body">
+        Welcome to the Nuxt 3 Form Application using ProvetCloud Design System
+      </p>
+    </header>
 
-      <RegistrationForm />
-    </div>
+    <!-- Main content -->
+    <main id="content" class="container">
+      <section
+        class="registration-section"
+        aria-labelledby="registration-heading"
+      >
+        <RegistrationForm />
+      </section>
+    </main>
   </div>
 </template>
 
@@ -21,7 +27,7 @@ import RegistrationForm from "~/components/RegistrationForm.vue";
 .container {
   width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
+  margin-inline: auto;
   padding: var(--n-space-l);
   box-sizing: border-box;
 }
