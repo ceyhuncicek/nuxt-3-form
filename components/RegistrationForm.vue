@@ -106,9 +106,10 @@
   </article>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
-import * as yup from "yup";
+import { object, string, boolean, ref as yupRef } from "yup";
+import type { InferType } from "yup";
 import "@provetcloud/web-components/lib/Input";
 import "@provetcloud/web-components/lib/Button";
 import "@provetcloud/web-components/lib/Checkbox";
@@ -118,30 +119,9 @@ import "@provetcloud/web-components/lib/Select";
 import "@provetcloud/web-components/lib/VisuallyHidden";
 import "@provetcloud/web-components/lib/Icon";
 
-const showPassword = ref(false);
-const showConfirmPassword = ref(false);
-
-const formData = ref({
-  email: "",
-  password: "",
-  confirmPassword: "",
-  agreeTerms: false,
-});
-
-const errors = ref({
-  email: undefined,
-  password: undefined,
-  confirmPassword: undefined,
-  agreeTerms: undefined,
-});
-
-const schema = yup.object({
-  email: yup
-    .string()
-    .required("Email is required")
-    .email("Invalid email format"),
-  password: yup
-    .string()
+const formSchema = object({
+  email: string().required("Email is required").email("Invalid email format"),
+  password: string()
     .required("Password is required")
     .min(8, "Password must be at least 8 characters")
     .matches(/[0-9]/, "Password must contain at least one number")
@@ -151,39 +131,65 @@ const schema = yup.object({
       /[^A-Za-z0-9]/,
       "Password must contain at least one special character"
     ),
-  confirmPassword: yup
-    .string()
+  confirmPassword: string()
     .required("Please confirm your password")
-    .oneOf([yup.ref("password")], "Passwords must match"),
-  agreeTerms: yup
-    .boolean()
+    .oneOf([yupRef("password")], "Passwords must match"),
+  agreeTerms: boolean()
+    .required()
     .oneOf([true], "You must agree to the terms and conditions"),
 });
 
-const validateForm = async () => {
+type FormData = InferType<typeof formSchema>;
+
+type FormErrors = {
+  [K in keyof FormData]?: string;
+};
+
+const showPassword = ref<boolean>(false);
+const showConfirmPassword = ref<boolean>(false);
+
+const formData = ref<FormData>({
+  email: "",
+  password: "",
+  confirmPassword: "",
+  agreeTerms: false,
+});
+
+const errors = ref<FormErrors>({
+  email: undefined,
+  password: undefined,
+  confirmPassword: undefined,
+  agreeTerms: undefined,
+});
+
+const validateForm = async (): Promise<boolean> => {
   try {
     // Reset errors
     Object.keys(errors.value).forEach((key) => {
-      errors.value[key] = undefined;
+      errors.value[key as keyof FormErrors] = undefined;
     });
 
     // Validate form data
-    await schema.validate(formData.value, { abortEarly: false });
+    await formSchema.validate(formData.value, { abortEarly: false });
     return true;
   } catch (validationError) {
-    if (validationError instanceof yup.ValidationError) {
+    if (validationError instanceof Error) {
       // Set validation errors
-      validationError.inner.forEach((error) => {
-        if (error.path) {
-          errors.value[error.path] = error.message;
-        }
-      });
+      if ("inner" in validationError) {
+        (
+          validationError.inner as Array<{ path?: string; message: string }>
+        ).forEach((error) => {
+          if (error.path) {
+            errors.value[error.path as keyof FormErrors] = error.message;
+          }
+        });
+      }
     }
     return false;
   }
 };
 
-const handleSubmit = async () => {
+const handleSubmit = async (): Promise<void> => {
   const isValid = await validateForm();
   if (isValid) {
     console.log("Form submitted:", formData.value);
