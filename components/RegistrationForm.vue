@@ -8,11 +8,12 @@
           </h2>
         </header>
 
-        <form @submit.prevent="handleSubmit" class="n-space-y-m">
+        <form @submit.prevent="onSubmit" class="n-space-y-m">
           <provet-fieldset>
             <provet-visually-hidden>Account Information</provet-visually-hidden>
             <provet-fieldset>
               <provet-input
+                name="email"
                 expand
                 label="Email"
                 type="email"
@@ -26,6 +27,7 @@
 
             <provet-fieldset>
               <provet-input
+                name="password"
                 expand
                 label="Password"
                 :type="showPassword ? 'text' : 'password'"
@@ -54,6 +56,7 @@
             <provet-fieldset>
               <provet-input
                 expand
+                name="confirmPassword"
                 label="Confirm Password"
                 :type="showConfirmPassword ? 'text' : 'password'"
                 v-model="formData.confirmPassword"
@@ -106,9 +109,14 @@
           </provet-fieldset>
 
           <footer class="button-container">
-            <provet-button type="submit" variant="primary" full-width
-              >Register</provet-button
+            <provet-button
+              type="submit"
+              variant="primary"
+              full-width
+              :disabled="isSubmitting"
             >
+              {{ isSubmitting ? "Registering..." : "Register" }}
+            </provet-button>
           </footer>
         </form>
       </div>
@@ -118,8 +126,6 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { object, string, boolean, ref as yupRef } from "yup";
-import type { InferType } from "yup";
 import "@provetcloud/web-components/lib/Input";
 import "@provetcloud/web-components/lib/Button";
 import "@provetcloud/web-components/lib/Checkbox";
@@ -129,88 +135,18 @@ import "@provetcloud/web-components/lib/Select";
 import "@provetcloud/web-components/lib/VisuallyHidden";
 import "@provetcloud/web-components/lib/Icon";
 import { useRouter } from "vue-router";
+import { useForm } from "~/composables/useForm";
 
-const formSchema = object({
-  email: string().required("Email is required").email("Invalid email format"),
-  password: string()
-    .required("Password is required")
-    .min(8, "Password must be at least 8 characters")
-    .matches(/[0-9]/, "Password must contain at least one number")
-    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .matches(/[a-z]/, "Password must contain at least one lowercase letter")
-    .matches(
-      /[^A-Za-z0-9]/,
-      "Password must contain at least one special character"
-    ),
-  confirmPassword: string()
-    .required("Please confirm your password")
-    .oneOf([yupRef("password")], "Passwords must match"),
-  agreeTerms: boolean()
-    .required()
-    .oneOf([true], "You must agree to the terms and conditions"),
-  receiveUpdates: boolean().default(false),
-});
+const router = useRouter();
+const { formData, errors, isSubmitting, handleSubmit } = useForm();
 
-type FormData = InferType<typeof formSchema>;
-
-type FormErrors = {
-  [K in keyof FormData]?: string;
-};
-
+// Toggle password visibility
 const showPassword = ref<boolean>(false);
 const showConfirmPassword = ref<boolean>(false);
 
-const formData = ref<FormData>({
-  email: "",
-  password: "",
-  confirmPassword: "",
-  agreeTerms: false,
-  receiveUpdates: false,
-});
-
-const errors = ref<FormErrors>({
-  email: undefined,
-  password: undefined,
-  confirmPassword: undefined,
-  agreeTerms: undefined,
-  receiveUpdates: undefined,
-});
-
-const router = useRouter();
-
-const validateForm = async (): Promise<boolean> => {
-  try {
-    // Reset errors
-    Object.keys(errors.value).forEach((key) => {
-      errors.value[key as keyof FormErrors] = undefined;
-    });
-
-    // Validate form data
-    await formSchema.validate(formData.value, { abortEarly: false });
-    return true;
-  } catch (validationError) {
-    if (validationError instanceof Error) {
-      // Set validation errors
-      if ("inner" in validationError) {
-        (
-          validationError.inner as Array<{ path?: string; message: string }>
-        ).forEach((error) => {
-          if (error.path) {
-            errors.value[error.path as keyof FormErrors] = error.message;
-          }
-        });
-      }
-    }
-    return false;
-  }
-};
-
-const handleSubmit = async (): Promise<void> => {
-  const isValid = await validateForm();
+const onSubmit = async () => {
+  const isValid = await handleSubmit();
   if (isValid) {
-    console.log("Form submitted:", formData.value);
-    // Here you would typically send the data to your API
-    // After successful submission, navigate to success page
     router.push("/success");
   }
 };
