@@ -6,6 +6,12 @@ export default defineNuxtConfig({
   // Configure for client-side rendering
   ssr: false,
 
+  // Base URL configuration for GitHub Pages
+  app: {
+    baseURL: process.env.NUXT_APP_BASE_URL || "/nuxt-3-form/",
+    buildAssetsDir: "assets",
+  },
+
   // ProvetCloud Design System
   css: [
     "@nordhealth/fonts/lib/fonts.css",
